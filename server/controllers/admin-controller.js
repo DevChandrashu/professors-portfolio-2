@@ -1,14 +1,35 @@
 // controllers/admin-controller.js
 
-const About = require('../models/About');
-const Project = require('../models/Project');
-const ResearchPaper = require('../models/ResearchPaper');
-const Conference = require('../models/Conference');
-const Achievement = require('../models/Achievement');
-const BlogPost = require('../models/BlogPost');
-const TeachingExperience = require('../models/TeachingExperience');
-const Award = require('../models/Award');
-const Collaboration = require('../models/Collaboration');
+const About = require('../models/about-model');
+const Project = require('../models/project-model');
+const ResearchPaper = require('../models/researchPaper-model');
+const Conference = require('../models/conference-model');
+const Achievement = require('../models/achievement-model');
+const BlogPost = require('../models/blogPost-model');
+const TeachingExperience = require('../models/teachingExperience-model');
+const Award = require('../models/award-model');
+const Collaboration = require('../models/collaboration-model');
+
+exports.home = async(req,res) => {
+  try {
+      res
+      .status(200)
+      .send('Hello world');
+  } catch (error) {
+      console.log(error)
+  }
+};
+
+exports.getDashboard = async (req, res) => {
+  try {
+    // const userData = await User.find({});
+    const userData = req.user;
+    console.log(userData);
+    return res.status(200).json({userData });
+  } catch (error) {
+    console.log(` error from admin route ${error}`);
+  }
+};
 
 /**
  * ---------------------

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
+
 /**
  * Register a new user.
  * Expects: { username, email, password } in req.body.
@@ -76,3 +77,15 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server error during login.' });
   }
 };
+
+exports.user = async (req, res) => {
+  try {
+    // const userData = await User.find({});
+    const userData = req.user;
+    console.log(userData);
+    return res.status(200).json({userData });
+  } catch (error) {
+    console.log(` error from user route ${error}`);
+  }
+};
+
