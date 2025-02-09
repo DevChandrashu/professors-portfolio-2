@@ -13,14 +13,17 @@ const Collaboration = require('../models/collaboration-model');
 
 const getPortfolio = async (req, res, next) => {
   try {
-    // Assume the portfolio owner's ID is provided as a URL parameter (e.g., /user/:userId)
-    const userId = req.params.userId;
+    // Extract the username from the URL parameter
+    const username = req.params.username;
 
-    // Check if the user exists
-    const user = await User.findById(userId);
+    // Find the user based on the username
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
+
+    // Use the user's _id for subsequent queries
+    const userId = user._id;
 
     // Retrieve portfolio data for the user
     const about = await About.findOne({ user: userId });

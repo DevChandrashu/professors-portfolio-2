@@ -1,10 +1,13 @@
 // src/context/AuthContext.js
 
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
 // Create the authentication context
 export const AuthContext = createContext();
+const URI = import.meta.env.VITE_SERVER_ENDPOINT
+//console.log(URI);
+
 
 // AuthProvider component wraps your app and provides auth state and functions
 export const AuthProvider = ({ children }) => {
@@ -38,18 +41,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       // Post credentials to login endpoint
-      const response = await axios.post('/api/auth/login', credentials);
+      const response = await axios.post(`${URI}/api/auth/login`, credentials);
       const token = response.data.token;
+      const user = response.data.userData;
+      //console.log(response.data);
+      
 
       // Save token to localStorage
       localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
 
       // Optionally, fetch the user profile from a secure endpoint
-      const profileResponse = await axios.get('/api/auth/user', {
+      const profileResponse = await axios.get(`/api/${user.username}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const user = profileResponse.data;
-      localStorage.setItem('user', JSON.stringify(user));
+      const userData = profileResponse.data;
 
       // Update auth state
       setAuthState({ token, user, loading: false });
@@ -71,15 +77,17 @@ export const AuthProvider = ({ children }) => {
   const register = async (data) => {
     try {
       // Post new user data to register endpoint
-      const response = await axios.post('/api/auth/register', data);
+      const response = await axios.post(`${URI}/api/auth/register`, data);
       const token = response.data.token;
       localStorage.setItem('token', token);
-
+      //console.log(response.data);
+      
       // Fetch the newly created user profile
-      const profileResponse = await axios.get('/api/auth/user', {
+      const profileResponse = await axios.get(`${URI}/api/${data.username}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const user = profileResponse.data;
+      const user = response.data.user
+      //console.log(profileResponse);
       localStorage.setItem('user', JSON.stringify(user));
 
       // Update auth state
@@ -97,3 +105,7 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+}

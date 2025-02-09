@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/User');
+const User = require('../models/user-model');
 
 
 /**
@@ -18,6 +18,11 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'User already exists.' });
     }
 
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ message: 'Username already exists.' });
+    }
+
     // Hash the password before storing it
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -32,11 +37,11 @@ exports.register = async (req, res) => {
     // Create a JWT token for the new user
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECURE_KEY,
       { expiresIn: '1h' }
     );
 
-    res.status(201).json({ token });
+    res.status(201).json({ token: token, user: newUser });
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({ message: 'Server error during registration.' });
@@ -61,17 +66,18 @@ exports.login = async (req, res) => {
     // Compare the submitted password with the stored hashed password
     const passwordValid = await bcrypt.compare(password, user.passwordHash);
     if (!passwordValid) {
+      console.log("password not Valid");
       return res.status(401).json({ message: 'Invalid credentials.' });
     }
 
     // Create a JWT token for the authenticated user
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECURE_KEY,
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({ token });
+    res.status(200).json({ token: token, userData: user });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login.' });
@@ -82,7 +88,7 @@ exports.user = async (req, res) => {
   try {
     // const userData = await User.find({});
     const userData = req.user;
-    console.log(userData);
+    //console.log(userData);
     return res.status(200).json({userData });
   } catch (error) {
     console.log(` error from user route ${error}`);

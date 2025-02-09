@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const getPortfolio = require('../middlewares/getPortfolio-middleware');
+const getPortfolioMiddleware = require('../middlewares/getPortfolio-middleware');
 const portfolioController = require('../controllers/admin-controller');
 
 /**
@@ -19,7 +19,7 @@ router.get('/', portfolioController.home);
  *   - Retrieve the user's portfolio data.
  *   - Attach that data to req.portfolio for use in the subsequent controller.
  */
-router.use('/:username', getPortfolio-middleware);
+router.use('/:username', getPortfolioMiddleware);
 
 /**
  * Public Portfolio for a Specific User

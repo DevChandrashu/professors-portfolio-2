@@ -1,7 +1,17 @@
 require("dotenv").config();
 const express  = require("express");
+const cors = require("cors")
 const app = express();
 const connectDb = require("./utils/db")
+
+//handling cors
+
+const corsOptions = {
+    origin: "http://localhost:5173",
+    methods:"GET, POST, PUT, DELETE, PATCH, HEAD",
+    credentials: true,
+}
+app.use(cors(corsOptions));
 
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: false })); 
@@ -20,12 +30,12 @@ app.use('/api/auth', authRouter);
 //   GET  /             → Home page for logged-out users.
 //   GET  /:username    → Public portfolio for a specific user.
 //   GET  /:username/projects  → Projects for a specific user, etc.
-app.use('/', portfolioRouter);
+app.use('/api/', portfolioRouter);
 
 // Admin Routes:
 // Nested admin routes are mounted under /user/:username/admin.
 // These routes are protected by auth middleware and allow a user to manage their own portfolio.
-app.use('/:username/admin', adminRouter);
+app.use('/api/:username/admin', adminRouter);
 
 app.use(errorMiddleware)
 

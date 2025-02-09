@@ -1,6 +1,6 @@
-import { z } from 'zod';
+const {z} = require("zod")
 
-export const signupSchema = z.object({
+const signupSchema = z.object({
   username: z
     .string()
     .min(3, { message: 'Username must be at least 3 characters long.' }),
@@ -9,3 +9,5 @@ export const signupSchema = z.object({
     .string()
     .min(6, { message: 'Password must be at least 6 characters long.' }),
 });
+
+module.exports = signupSchema
