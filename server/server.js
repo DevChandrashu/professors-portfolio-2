@@ -7,11 +7,14 @@ const connectDb = require("./utils/db")
 //handling cors
 
 const corsOptions = {
-    origin: ["http://localhost:5173", "https://professors-portfolio-q122.vercel.app"], // Allow local dev and deployed frontend
+    origin: ["http://localhost:5173", "https://professors-portfolio-q122.vercel.app"], 
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true,
 };
 app.use(cors(corsOptions));
+
+// Ensure preflight requests are handled
+app.options("*", cors(corsOptions));
 
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: false })); 
