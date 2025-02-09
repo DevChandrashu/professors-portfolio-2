@@ -23,7 +23,7 @@ exports.home = async(req,res) => {
 exports.getDashboard = async (req, res) => {
   try {
     // const userData = await User.find({});
-    const userData = req.user;
+    const userData = req.portfolio
     // console.log(userData);
     return res.status(200).json({userData });
   } catch (error) {

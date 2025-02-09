@@ -7,7 +7,7 @@ import dummyPortfolio from "../data/dummyPortfolio.json";
 
 const Portfolio = () => {
   const { username } = useParams();
-  console.log(username);
+  //console.log(username);
   
   const navigate = useNavigate();
 
@@ -18,7 +18,10 @@ const Portfolio = () => {
     axios
       .get(`${import.meta.env.VITE_SERVER_ENDPOINT}/api/${username}`)
       .then((res) => {
-        setPortfolio(res.data);
+        console.log(res.data);
+        setPortfolio(res.data.userData);
+        //console.log("portfolio: ",portfolio);
+        
         setLoading(false);
       })
       .catch((err) => {
@@ -30,6 +33,8 @@ const Portfolio = () => {
         }
       });
   }, [username, navigate]);
+
+  console.log("portfolio: ",portfolio);
 
   if (loading) {
     return (
