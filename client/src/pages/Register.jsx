@@ -18,7 +18,7 @@ function Register() {
     const { name, value } = e.target;
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: value,
+      [name]: name === "username" ? value.toLowerCase().replace(/\s+/g, "") : value, // Convert to lowercase and remove spaces
     }));
   };
 

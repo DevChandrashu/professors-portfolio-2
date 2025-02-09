@@ -7,6 +7,8 @@ import dummyPortfolio from "../data/dummyPortfolio.json";
 
 const Portfolio = () => {
   const { username } = useParams();
+  console.log(username);
+  
   const navigate = useNavigate();
 
   const [portfolio, setPortfolio] = useState(null);
