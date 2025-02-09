@@ -21,7 +21,12 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center space-x-4">
           {authState.user ? (
-            <>
+            <><Link
+              to={`/${authState.user.username}`}
+              className="text-gray-800 hover:text-green-600"
+            >
+              Portfolio
+            </Link>
               {/* Admin Link: directs to the admin panel of the logged in user */}
               <Link
                 to={`/${authState.user.username}/admin`}
